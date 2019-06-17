@@ -36,7 +36,7 @@ exports.createPages = ({ actions, graphql }) => {
       console.log(path);
       createPage({
         path: path,
-        component: templates[node.formatter.layout],
+        component: templates[node.frontmatter.layout],
         context: { fileAbsolutePath: node.fileAbsolutePath },
       })
     })
