@@ -9,17 +9,18 @@ const path = require(`path`)
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions
 
-  const blogPostTemplate = path.resolve(`src/templates/blogTemplate.js`)
+  const templates = {
+    "department": path.resolve(`src/templates/department.js`),
+  };
 
   return graphql(`
     {
-      allMarkdownRemark(
-         limit: 1000
-      ) {
+      allMarkdownRemark {
         edges {
           node {
+            fileAbsolutePath
             frontmatter {
-              path
+              layout
             }
           }
         }
@@ -31,10 +32,12 @@ exports.createPages = ({ actions, graphql }) => {
     }
 
     return result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+      const path = node.fileAbsolutePath.replace(`${__dirname}/src/markdown-pages`, "")
+      console.log(path);
       createPage({
-        path: node.frontmatter.path,
-        component: blogPostTemplate,
-        context: {}, // additional data can be passed via context
+        path: path,
+        component: templates[node.formatter.layout],
+        context: { fileAbsolutePath: node.fileAbsolutePath },
       })
     })
   })
