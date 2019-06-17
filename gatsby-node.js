@@ -33,7 +33,6 @@ exports.createPages = ({ actions, graphql }) => {
 
     return result.data.allMarkdownRemark.edges.forEach(({ node }) => {
       const path = node.fileAbsolutePath.replace(`${__dirname}/src/markdown-pages`, "")
-      console.log(path);
       createPage({
         path: path,
         component: templates[node.frontmatter.layout],
